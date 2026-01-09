@@ -1,3 +1,10 @@
+# My specific files NOT to check in
+config.json
+.env
+results/
+data/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
