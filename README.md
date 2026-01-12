@@ -25,12 +25,20 @@ Environmental hazards are not evenly distributed. HeatShield quantifies *where* 
 
 ## Data sources (initial build)
 
-- Air quality: AirNow / EPA AQS
-- Temperature: NOAA station products (e.g., GHCND / USCRN)
-- Smoke: NOAA HMS
-- Socioeconomic: ACS + TIGER/Line
+| Domain | Source | Access | Output naming (examples) | URL |
+| --- | --- | --- | --- |
+| Air quality | AirNow API | API | `airnow_PM25_YYYY-MM-DD.csv`, `airnow_pm25_clean.parquet` | https://www.airnowapi.org/ |
+| Air quality | EPA AQS API | API | `aqs_88101_YYYY-MM-DD.csv`, `aqs_pm25_clean.parquet` | https://aqs.epa.gov/aqsweb/documents/data_api.html |
+| Temperature/precip | NOAA CDO (GHCND) | API | `ghcnd_{datatype}_YYYY-MM.csv`, `ghcnd_daily_raw_all.csv` | https://www.ncei.noaa.gov/cdo-web/webservices/v2 |
+| Temperature/precip | NOAA USCRN | HTTP | `uscrn_2024_hourly_clean.parquet` | https://www.ncei.noaa.gov/pub/data/uscrn/products/hourly02/ |
+| Smoke/fire | NOAA HMS | HTTP | `hms_smoke_YYYYMMDD.parquet`, `hms_fire_YYYYMMDD.parquet` | https://www.ospo.noaa.gov/products/land/hms.html |
+| HRRR (optional) | NOAA HRRR (AWS) | HTTP | `hrrr_YYYYMMDD_HHz_f00.grib2`, `hrrr_ca_YYYYMMDD_HHz.nc` | https://registry.opendata.aws/noaa-hrrr-pds/ |
+| Land cover | NLCD 2024 | Manual | `nlcd_2024_ca_summary.csv`, `nlcd_2024_ca_clip.tif` | https://www.mrlc.gov/data/nlcd-2024-land-cover-conus |
+| Vegetation | Sentinel-2 NDVI (GEE) | API | `ndvi_ca_{date_tag}_tile{idx}.tif` | https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR |
+| Socioeconomic | ACS 2023 | API | `acs_2023_california_tracts.csv` | https://api.census.gov/data.html |
+| Boundaries | TIGER/Line | HTTP | `cb_2023_us_state_20m.zip` | https://www2.census.gov/geo/tiger/GENZ2023/shp/ |
 
-(Exact sources, versions, and preprocessing notes should be logged in the notebook and/or a `docs/data_sources.md`.)
+Detailed naming rules and parameters live in `config/config.yaml` under `DATA_SOURCES`.
 
 ---
 
@@ -85,4 +93,3 @@ MIT
 ## Contact
 
 Blue Leaf Labs — https://www.blueleaflabs.org
-

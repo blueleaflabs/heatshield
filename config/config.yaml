@@ -1,0 +1,257 @@
+# Project identity
+parent: blueleaflabs
+project: heatshield
+
+# California bounding box (approximate)
+bbox:
+  nwlat: 42.0095
+  nwlng: -124.4820
+  selat: 32.5343
+  selng: -114.1315
+
+# Time window (UTC)
+start_date: "2024-06-01"
+end_date: "2024-10-31"
+
+# Optional local overrides
+PURPLEAIR_SENSOR_INDEX: ""
+
+# Base URLs
+USCRN_BASE_HOURLY: "https://www.ncei.noaa.gov/pub/data/uscrn/products/hourly02/"
+HRRR_BASE_GENERIC: "https://nomads.ncep.noaa.gov/cgi-bin/filter_hrrr_2d.pl"
+HRRR_BASE_SMOKE: "https://nomads.ncep.noaa.gov/cgi-bin/filter_hrrr_smoke_2d.pl"
+HMS_BASE_SMOKE: "https://satepsanone.nesdis.noaa.gov/pub/FIRE/web/HMS/Smoke_Polygons/Shapefile"
+HMS_BASE_FIRE: "https://satepsanone.nesdis.noaa.gov/pub/FIRE/web/HMS/Fire_Points/Shapefile"
+ACS_BASE_ACS5: "https://api.census.gov/data/2023/acs/acs5"
+ACS_BASE_SUBJECT: "https://api.census.gov/data/2023/acs/acs5/subject"
+WHP_ZIP: "https://www.fs.usda.gov/rds/archive/products/RDS-2015-0047-4/RDS-2015-0047-4_Data.zip"
+WHP_TIF_NAME: "Data/whp2023_GeoTIF/whp2023_cnt_conus.tif"
+
+# Headers
+USER_AGENT_HEADERS:
+  User-Agent: "HeatShield/1.0"
+NOMADS_HEADERS:
+  User-Agent: "HeatShield/1.0"
+  Referer: "https://nomads.ncep.noaa.gov/"
+
+# HRRR
+HRRR_CYCLES:
+  - "00"
+HRRR_FCST_HOURS:
+  - 0
+
+# Output paths (relative to repo root)
+out_dir: "results"
+NLCD_MANUAL_ZIP: "results/manual/Annual_NLCD_LndCov_2024_CU_C1V1.zip"
+
+# Spatial config
+WGS84_EPSG: 4326
+CA_ALBERS_EPSG: 3310
+OPS_EPSG: 3310
+grid_resolution_m: 3000
+crs_epsg: 4326
+
+# USCRN configuration for California
+USCRN_STATION_NAME:
+  - "CA Bodega 6 WSW"
+  - "CA Fallbrook 5 NE"
+  - "CA Merced 23 WSW"
+  - "CA Redding 12 WNW"
+  - "CA Santa Barbara 11 W"
+  - "CA Stovepipe Wells 1 SW"
+  - "CA Yosemite Village 12 W"
+USCRN_YEARS:
+  - 2024
+
+# AQS parameters
+# URL to signup:
+# https://aqs.epa.gov/aqsweb/documents/data_api.html
+AQS_STATE_CODE: "06"
+AQS_BASE: "https://aqs.epa.gov/data/api/sampleData/byBox"
+AQS_PARAM: "88101"
+AQS_TIMEZONE: "America/Los_Angeles"
+AQS_MAX_RETRIES: 6
+AQS_BACKOFF_BASE: 0.8
+AQS_TIMEOUT: 120
+
+# PurpleAir parameters
+PURPLEAIR_BASE: "https://api.purpleair.com/v1/sensors"
+PURPLEAIR_BACKOFF_BASE: 0.8
+
+# Data directories (relative to out_dir)
+CDO_RAW_DIRNAME: "cdo_raw_monthly"
+CDO_CLEAN_DIRNAME: "cdo_clean"
+AIRNOW_RAW_DIRNAME: "airnow_raw_daily"
+AIRNOW_CLEAN_DIRNAME: "airnow_clean"
+PURPLEAIR_RAW_DIRNAME: "purpleair_raw_pages"
+AQS_RAW_DIRNAME: "aqs_raw_daily"
+USCRN_RAW_DIRNAME: "uscrn_raw"
+USCRN_CLEAN_DIRNAME: "uscrn_clean"
+HRRR_RAW_DIRNAME: "hrrr_raw"
+HRRR_CLEAN_DIRNAME: "hrrr_ca"
+HMS_RAW_DIRNAME: "hms_raw"
+HMS_CLEAN_DIRNAME: "hms_clean"
+MANUAL_DIRNAME: "manual"
+LOOKUPS_DIRNAME: "lookups"
+NLCD_TMP_DIRNAME: "nlcd_tmp"
+
+# PurpleAir parameters
+PURPLEAIR_FIELDS: "sensor_index,pm2.5_atm,humidity,temperature,latitude,longitude,last_seen"
+PURPLEAIR_LIMIT: 1000
+PURPLEAIR_LOCATION_TYPE: 0
+PURPLEAIR_MAX_AGE_MIN: 1440
+PURPLEAIR_MAX_PAGES: 1100
+PURPLEAIR_MAX_RETRIES: 6
+PURPLEAIR_TIMEOUT: 180
+
+# HRRR parameters
+HRRR_AWS_TEMPLATE: "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.{ymd}/conus/hrrr.t{hh}z.wrfsfcf00.grib2"
+WGRIB2_CMD: ""
+
+# NLCD outputs (relative to out_dir)
+NLCD_SUMMARY_CSV_NAME: "nlcd_2024_ca_summary.csv"
+NLCD_CLIP_TIF_NAME: "nlcd_2024_ca_clip.tif"
+
+# GHCND outputs (relative to out_dir)
+GHCND_RAW_CSV_NAME: "ghcnd_daily_raw_all.csv"
+GHCND_CLEAN_PARQUET_NAME: "ghcnd_daily_cleaned.parquet"
+GHCND_CLEAN_CSV_NAME: "ghcnd_daily_cleaned.csv"
+GHCND_STATIONS_TXT_NAME: "ghcnd-stations.txt"
+
+# Analysis outputs (relative to out_dir)
+GRID_FILENAME: "grid_3000m_CA_epsg3310.parquet"
+AIRNOW_FILENAME: "airnow_pm25_clean.parquet"
+AQS_FILENAME: "aqs_pm25_clean.parquet"
+USCRN_FILENAME: "uscrn_2024_hourly_clean.parquet"
+HMS_FIRE_FILENAME: "hms_fire_2024-06-01_to_2024-10-31.parquet"
+HMS_SMOKE_FILENAME: "hms_smoke_2024-06-01_to_2024-10-31.parquet"
+GHCND_FILENAME: "ghcnd_daily_cleaned.parquet"
+FINAL_DAILY_FILENAME: "final_daily_grid_3000m_20240601_20241031.parquet"
+
+# Equity/analysis parameters
+URBAN_CELL_AREA_KM2: 5.0
+OUTLIER_PCT: 0.95
+EQUITY_OUTPUT_FILENAME: "equity_double_burden_2024Q3_CA.parquet"
+CLUSTER_OUTPUT_FILENAME: "grid_hotspot_clusters_2024Q3_CA.parquet"
+
+# Census/ACS outputs (relative to out_dir)
+TRACTS_POLY_FILENAME: "ca_tracts_2024_poly_3310.parquet"
+TRACTS_CENTROIDS_FILENAME: "ca_tracts_2024_centroids_3310.parquet"
+ACS_CENTROIDS_FILENAME: "acs_2023_ca_centroids_merged_3310.parquet"
+
+# GHCND/USCRN processing parameters
+USCRN_YEARS_FILTER: [2024]
+
+# Census/ACS inputs (filenames expected in manual dir)
+TRACTS_ZIP_FILENAME: "tl_2024_06_tract.zip"
+ACS_TRACTS_FILENAME: "acs_2023_california_tracts.csv"
+
+# Equity column candidates (order matters)
+INCOME_COL_CANDIDATES:
+  - "median_income"
+  - "income"
+  - "med_income"
+  - "household_income_median"
+ELDERLY_COL_CANDIDATES:
+  - "percent_elderly"
+  - "pct_elderly"
+  - "elderly_percent"
+  - "pct_65_plus"
+  - "share_65plus"
+  - "pct_over_65"
+POVERTY_COL_CANDIDATES:
+  - "percent_below_poverty"
+  - "pct_below_poverty"
+  - "pct_poverty"
+  - "poverty_percent"
+  - "poverty_pct"
+
+# HTTP timeouts and retries (seconds unless noted)
+CENSUS_STATES_TIMEOUT: 120
+CDO_TIMEOUT: 180
+CDO_MAX_RETRIES: 6
+CDO_BACKOFF_BASE: 0.8
+AIRNOW_BASE_URL: "https://www.airnowapi.org/aq/data/"
+AIRNOW_PARAMETERS: "PM25"
+AIRNOW_DATATYPE: "A"
+AIRNOW_FORMAT: "text/csv"
+AIRNOW_TIMEOUT: 180
+AIRNOW_MAX_RETRIES: 6
+AIRNOW_BACKOFF_BASE: 0.8
+USCRN_LIST_TIMEOUT: 120
+USCRN_DOWNLOAD_TIMEOUT: 300
+HRRR_DOWNLOAD_TIMEOUT: 900
+HMS_TIMEOUT: 120
+WHP_TIMEOUT: 600
+ACS_TIMEOUT: 120
+GHCND_TIMEOUT: 120
+NOMADS_TIMEOUT: 120
+
+# NLCD/HMS/other timeouts
+DOWNLOAD_TIMEOUT: 60
+
+# Base URLs (additional)
+CENSUS_STATES_ZIP_URL: "https://www2.census.gov/geo/tiger/GENZ2023/shp/cb_2023_us_state_20m.zip"
+CDO_BASE_URL: "https://www.ncei.noaa.gov/cdo-web/api/v2/data"
+GHCND_STATIONS_URL: "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
+
+# ACS parameters
+ACS_GEO:
+  for: "tract:*"
+  in: "state:06 county:*"
+ACS_VARS_ACS5: "NAME,B01001_001E,B19013_001E"
+ACS_VARS_SUBJECT: "S0101_C02_001E,S1701_C03_001E"
+
+# Data source naming reference (human-readable)
+DATA_SOURCES:
+  CENSUS_BOUNDARY:
+    url: "https://www2.census.gov/geo/tiger/GENZ2023/shp/cb_2023_us_state_20m.zip"
+    local_filename: "cb_2023_us_state_20m.zip"
+  CDO_GHCND:
+    api_base: "https://www.ncei.noaa.gov/cdo-web/api/v2/data"
+    per_month_csv: "ghcnd_{datatype}_{YYYY-MM}.csv"
+    raw_all_csv: "ghcnd_daily_raw_all.csv"
+    wide_csv: "ghcnd_daily_wide.csv"
+  AIRNOW:
+    api_base: "https://www.airnowapi.org/aq/data/"
+    daily_csv: "airnow_PM25_{YYYY-MM-DD}.csv"
+    raw_parquet: "airnow_pm25_raw.parquet"
+    clean_parquet: "airnow_pm25_clean.parquet"
+    daily_parquet: "airnow_pm25_daily.parquet"
+  PURPLEAIR:
+    api_base: "https://api.purpleair.com/v1/sensors"
+    page_parquet: "purpleair_page_{page:04d}.parquet"
+    raw_parquet: "purpleair_raw.parquet"
+    clean_parquet: "purpleair_clean.parquet"
+    hourly_parquet: "purpleair_hourly.parquet"
+  AQS:
+    api_base: "https://aqs.epa.gov/data/api/sampleData/byBox"
+    daily_csv: "aqs_{param}_{YYYY-MM-DD}.csv"
+    raw_parquet: "aqs_pm25_raw.parquet"
+    clean_parquet: "aqs_pm25_clean.parquet"
+    daily_parquet: "aqs_pm25_daily.parquet"
+  USCRN:
+    raw_parquet: "uscrn_2024_hourly_raw.parquet"
+    clean_parquet: "uscrn_2024_hourly_clean.parquet"
+  HRRR:
+    aws_template: "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.{ymd}/conus/hrrr.t{hh}z.wrfsfcf00.grib2"
+    raw_grib: "hrrr_{YYYYMMDD}_{HH}z_f00.grib2"
+    clean_netcdf: "hrrr_ca_{YYYYMMDD}_{HH}z.nc"
+  HMS:
+    zip_name: "hms_{kind}{YYYYMMDD}.zip"
+    daily_parquet: "hms_{kind}_{YYYYMMDD}.parquet"
+    window_parquet: "hms_{kind}_{START}_to_{END}.parquet"
+  WHP:
+    zip_basename: "basename(WHP_ZIP_URL)"
+    lookup_parquet: "whp_grid.parquet"
+  ACS:
+    output_csv: "acs_2023_california_tracts.csv"
+  NLCD:
+    summary_csv: "nlcd_2024_ca_summary.csv"
+    grid_parquet: "nlcd_grid.parquet"
+    clip_tif: "nlcd_2024_ca_clip.tif"
+  NDVI:
+    tile_tif: "ndvi_ca_{date_tag}_tile{idx}.tif"
+  GRID:
+    wgs84_parquet: "grid_{res_m}m_CA.parquet"
+    epsg3310_parquet: "grid_{res_m}m_CA_epsg3310.parquet"
